@@ -1,6 +1,5 @@
 #include <unistd.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <wiringPi.h>
 #include <softPwm.h>
 
@@ -10,9 +9,9 @@ int main (int sleepTime, int maxTemp, int cutoffTemp)
   wiringPiSetup ();
   pinMode (1, OUTPUT);
   softPwmCreate (1, 0, 100);
-  maxTemperature = maxTemp * 1000;
-  cutoffTemperature = cutoffTemp * 1000;
-  step = (70 - maxTemp) * 1000 / 3;
+  double maxTemperature = maxTemp * 1000;
+  double cutoffTemperature = cutoffTemp * 1000;
+  double step = (70 - maxTemp) * 1000 / 3;
   for (;;)
   {
 	usleep(sleepTime);
@@ -29,7 +28,7 @@ int main (int sleepTime, int maxTemp, int cutoffTemp)
 		if (T >= maxTemperature + step && T < maxTemperature + (step * 2)){
 			softPwmWrite (1, 50);
 		}
-		if (T >= maxTemperature + (step * 2) && T <70000){
+		if (T >= maxTemperature + (step * 2) && T < 70000){
 			softPwmWrite (1, 75);
 		}
 		if (T >= 70000){

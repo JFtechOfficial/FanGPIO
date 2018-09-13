@@ -14,7 +14,7 @@ int main (int sleepTime, int maxTemp, int cutoffTemp)
   double step = (70 - maxTemp) * 1000 / 3;
   for (;;)
   {
-	usleep(sleepTime);
+	usleep(sleepTime * 1000);
 	FILE *temperatureFile;
 		double T;
 		temperatureFile = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");

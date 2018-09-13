@@ -1,31 +1,35 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <wiringPi.h>
 #include <softPwm.h>
 
 
-int main (void)
+int main (int sleepTime, int maxTemp, int cutoffTemp)
 {
-  wiringPiSetup () ;
-  pinMode (1, OUTPUT) ;
-  softPwmCreate (1, 0, 100) ;
+  wiringPiSetup ();
+  pinMode (1, OUTPUT);
+  softPwmCreate (1, 0, 100);
+  maxTemperature = maxTemp * 1000;
+  cutoffTemperature = cutoffTemp *1000;
+  step = (70 - maxTemp)/3;
   for (;;)
   {
-	usleep(50000);
+	usleep(sleepTime);
 	FILE *temperatureFile;
 		double T;
 		temperatureFile = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
 		fscanf (temperatureFile, "%lf", &T);
-		if (T < 38000){
+		if (T < cutoffTemperature){
 			softPwmWrite (1, 0);
 		}
-		if (T >= 40000 && T <50000){
+		if (T >= maxTemperature && T < maxTemperature + step){
 			softPwmWrite (1, 25);
 		}
-		if (T >= 50000 && T <60000){
+		if (T >= maxTemperature + step && T < maxTemperature + (step * 2)){
 			softPwmWrite (1, 50);
 		}
-		if (T >= 60000 && T <70000){
+		if (T >= maxTemperature + (step * 2) && T <70000){
 			softPwmWrite (1, 75);
 		}
 		if (T >= 70000){
@@ -33,5 +37,5 @@ int main (void)
 		}
 		fclose (temperatureFile);
   }
-  return 0 ;
+  return 0;
 }

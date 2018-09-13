@@ -11,8 +11,8 @@ int main (int sleepTime, int maxTemp, int cutoffTemp)
   pinMode (1, OUTPUT);
   softPwmCreate (1, 0, 100);
   maxTemperature = maxTemp * 1000;
-  cutoffTemperature = cutoffTemp *1000;
-  step = (70 - maxTemp)/3;
+  cutoffTemperature = cutoffTemp * 1000;
+  step = (70 - maxTemp) * 1000 / 3;
   for (;;)
   {
 	usleep(sleepTime);
